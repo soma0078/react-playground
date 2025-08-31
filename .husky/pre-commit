@@ -12,7 +12,7 @@ echo "🧪 Other files: $OTHER_FILES"
 
 # 3. TypeScript 검사
 if [ -n "$TS_FILES" ]; then
-  npx tsc --noEmit --pretty false --skipLibCheck $TS_FILES
+  npx tsc --noEmit --pretty false --skipLibCheck --project tsconfig.app.json
   STATUS=$?
   if [ $STATUS -ne 0 ]; then
     echo "❌ TypeScript 타입 오류 발생. 커밋 중단!"
