@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import { Home } from './pages/Home'
 import { DefaultLayout } from './layouts/Default'
+import { Carousel } from './pages/Carousel'
 
 const router = createBrowserRouter([
   {
@@ -9,6 +10,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Home />
+      },
+      {
+        path: '/carousel',
+        element: <Carousel />
       }
     ]
   }
