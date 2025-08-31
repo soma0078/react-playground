@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "icons": "npx tsx scripts/generate-icons.ts"
+    "icons": "npx tsx scripts/generate-icons.ts",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.12",
@@ -27,6 +28,8 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.5",
     "prettier": "3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "typescript": "~5.8.3",

@@ -1,0 +1,39 @@
+#!/bin/sh
+
+echo "🔍 [1] Staged TypeScript/JS/TSX/JSX 파일 검사 시작"
+
+# 1. 스테이징된 파일만 필터링
+TS_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|tsx|js|jsx)$' || true)
+OTHER_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(css|scss|md|json)$' || true)
+
+# 2. 파일 목록 출력
+echo "🧪 TypeScript/JS files: $TS_FILES"
+echo "🧪 Other files: $OTHER_FILES"
+
+# 3. TypeScript 검사
+if [ -n "$TS_FILES" ]; then
+  npx tsc --noEmit --pretty false --skipLibCheck $TS_FILES
+  STATUS=$?
+  if [ $STATUS -ne 0 ]; then
+    echo "❌ TypeScript 타입 오류 발생. 커밋 중단!"
+    exit 1
+  fi
+fi
+
+# 4. ESLint 검사
+if [ -n "$TS_FILES" ]; then
+  npx eslint --fix $TS_FILES
+fi
+
+# 5. Prettier 검사
+if [ -n "$TS_FILES$OTHER_FILES" ]; then
+  npx prettier --write $TS_FILES $OTHER_FILES
+fi
+
+# 6. 다시 staged 상태로 추가
+if [ -n "$TS_FILES$OTHER_FILES" ]; then
+  git add $TS_FILES $OTHER_FILES
+fi
+
+echo "✅ 모든 검사 통과. 커밋 진행"
+exit 0
