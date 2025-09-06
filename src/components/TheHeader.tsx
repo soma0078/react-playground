@@ -27,6 +27,7 @@ export const TheHeader = () => {
         <nav className="absolute top-0 right-0 *:not-first:ml-2">
           <NavLink to="/">Home</NavLink>
           <NavLink to="/carousel">Carousel</NavLink>
+          <NavLink to="/chart/area-chart">Chart</NavLink>
         </nav>
       </div>
     </header>

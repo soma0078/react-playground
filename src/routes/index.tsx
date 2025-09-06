@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router'
 import { Home } from './pages/Home'
 import { DefaultLayout } from './layouts/Default'
 import { Carousel } from './pages/Carousel'
+import { AreaChartGradient } from './pages/AreaChart'
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
       {
         path: '/carousel',
         element: <Carousel />
+      },
+      {
+        path: '/chart',
+        children: [{ path: 'area-chart', element: <AreaChartGradient /> }]
       }
     ]
   }
