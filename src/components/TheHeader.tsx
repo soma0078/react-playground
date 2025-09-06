@@ -26,7 +26,7 @@ export const TheHeader = () => {
         <h1>Vite + React + TS Playground</h1>
         <nav className="absolute top-0 right-0 *:not-first:ml-2">
           <NavLink to="/">Home</NavLink>
-          <NavLink to="/carsouel">Carousel</NavLink>
+          <NavLink to="/carousel">Carousel</NavLink>
         </nav>
       </div>
     </header>

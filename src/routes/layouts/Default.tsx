@@ -1,5 +1,5 @@
 import { Outlet, ScrollRestoration } from 'react-router'
-import { TheHeader } from '../components/TheHeader'
+import { TheHeader } from '../../components/TheHeader'
 
 export const DefaultLayout = () => {
   return (
