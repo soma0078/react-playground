@@ -40,6 +40,7 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
+  --chart-shady-lane: #3f2b96;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -82,6 +83,13 @@ a:hover {
 }
 
 @theme inline {
+  --background-image-pastel-gradient: linear-gradient(
+    90deg,
+    rgba(207, 245, 255, 1) 0%,
+    rgba(233, 227, 255, 1) 50%,
+    rgba(255, 249, 199, 1) 100%
+  );
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -109,7 +117,8 @@ a:hover {
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
+  --color-chart-shady-lane: var(--chart-shady-lane)
+    --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);

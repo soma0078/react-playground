@@ -2,6 +2,7 @@ import * as React from 'react'
 import * as RechartsPrimitive from 'recharts'
 
 import { cn } from '@/lib/utils'
+import { Triangle } from 'lucide-react'
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: '', dark: '.dark' } as const
@@ -115,7 +116,9 @@ function ChartTooltipContent({
   formatter,
   color,
   nameKey,
-  labelKey
+  labelKey,
+  chartType,
+  chartData
 }: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
   React.ComponentProps<'div'> & {
     hideLabel?: boolean
@@ -123,6 +126,8 @@ function ChartTooltipContent({
     indicator?: 'line' | 'dot' | 'dashed'
     nameKey?: string
     labelKey?: string
+    chartType?: 'areaChart' | 'default'
+    chartData?: { date: string; value: number }[]
   }) {
   const { config } = useChart()
 
@@ -168,10 +173,32 @@ function ChartTooltipContent({
 
   const nestLabel = payload.length === 1 && indicator !== 'dot'
 
+  const isAreaChart = chartType === 'areaChart'
+
+  let diffText: string | null = null
+
+  if (isAreaChart && chartData) {
+    const [item] = payload
+
+    const index = chartData.findIndex((d) => d.date === item.payload.date)
+    if (index === 0) {
+      diffText = '--'
+    } else if (index > 0) {
+      const prevValue = chartData[index - 1]?.value
+      if (prevValue !== undefined && item.value !== undefined) {
+        const diff = Number(item.value) - Number(prevValue)
+        diffText = diff >= 0 ? `+ ${diff}` : `- ${Math.abs(diff)}`
+      }
+    }
+  }
+
+  console.log(diffText)
+
   return (
     <div
       className={cn(
-        'border-border/50 bg-background grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl',
+        'grid min-w-[8rem] items-start gap-1.5 rounded-lg px-2.5 py-1.5 text-xs',
+        !isAreaChart && 'bg-background border-border/50 border shadow-xl',
         className
       )}
     >
@@ -218,24 +245,45 @@ function ChartTooltipContent({
                       />
                     )
                   )}
-                  <div
-                    className={cn(
-                      'flex flex-1 justify-between leading-none',
-                      nestLabel ? 'items-end' : 'items-center'
-                    )}
-                  >
-                    <div className="grid gap-1.5">
-                      {nestLabel ? tooltipLabel : null}
-                      <span className="text-muted-foreground">
-                        {itemConfig?.label || item.name}
+                  {isAreaChart ? (
+                    <div className="flex flex-col items-center">
+                      <span className="flex items-center gap-x-1">
+                        전일 대비
+                        <span
+                          className={cn(
+                            'flex items-center gap-x-1',
+                            diffText === '--'
+                              ? '[&_svg]:hidden'
+                              : diffText?.startsWith('+')
+                                ? 'text-red-500 [&_svg]:fill-red-500'
+                                : 'text-blue-500 [&_svg]:rotate-180 [&_svg]:fill-blue-500'
+                          )}
+                        >
+                          {diffText} <Triangle className="size-2.5" />
+                        </span>
                       </span>
+                      <span>{item.value && item.value.toLocaleString()}</span>
                     </div>
-                    {item.value && (
-                      <span className="text-foreground font-mono font-medium tabular-nums">
-                        {item.value.toLocaleString()}
-                      </span>
-                    )}
-                  </div>
+                  ) : (
+                    <div
+                      className={cn(
+                        'flex flex-1 justify-between leading-none',
+                        nestLabel ? 'items-end' : 'items-center'
+                      )}
+                    >
+                      <div className="grid gap-1.5">
+                        {nestLabel ? tooltipLabel : null}
+                        <span className="text-muted-foreground">
+                          {itemConfig?.label || item.name}
+                        </span>
+                      </div>
+                      {item.value && (
+                        <span className="text-foreground font-mono font-medium tabular-nums">
+                          {item.value.toLocaleString()}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </>
               )}
             </div>
