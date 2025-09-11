@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import {
-  type ColumnDef,
   type ColumnFiltersState,
   flexRender,
   getCoreRowModel,
@@ -13,10 +12,9 @@ import {
   type SortingState,
   type VisibilityState
 } from '@tanstack/react-table'
-import { ArrowUpDown, ChevronDown } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -32,80 +30,66 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { useGetData, type Payment } from '../../mock'
+import { useGetData } from '../../mock'
+import { columns } from '@/components/table'
 
-export const columns: ColumnDef<Payment>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && 'indeterminate')
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('status')}</div>
-    )
-  },
-  {
-    accessorKey: 'email',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue('email')}</div>
-  },
-  {
-    accessorKey: 'amount',
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('amount'))
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-      }).format(amount)
-
-      return <div className="text-right font-medium">{formatted}</div>
-    }
-  }
-]
-
+/**
+ * DataTableDemo 컴포넌트
+ * - tanstack/react-table 기반 데이터 테이블 구현
+ * - 정렬, 필터링, 컬럼 visibility, pagination 지원
+ **/
 export default function DataTableDemo() {
+  /* Mock 데이터 가져오기 */
   const data = useGetData()
+
+  /* 정렬 상태 */
   const [sorting, setSorting] = React.useState<SortingState>([])
+
+  /* 컬럼 필터 상태 */
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
+
+  /* 컬럼 표시 여부 상태 */
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
+
+  /* 선택된 row 상태 */
   const [rowSelection, setRowSelection] = React.useState({})
 
+  /**
+   * useReactTable()
+   * - tanstack/react-table의 핵심 훅
+   * - 테이블의 상태(state)와 기능(getRowModel 등)을 연결하고,
+   *   테이블을 렌더링할 수 있는 "table 객체"를 반환함
+   *
+   * 주요 옵션 설명:
+   * --------------------------------------------------------
+   * data: 실제 테이블에 렌더링할 데이터 배열
+   * columns: 컬럼 정의 (헤더명, 셀 렌더링 방식, accessor 등)
+   *
+   * onSortingChange: 정렬 상태 변경 핸들러
+   * onColumnFiltersChange: 컬럼 필터 상태 변경 핸들러
+   * onColumnVisibilityChange: 컬럼 표시/숨김 변경 핸들러
+   * onRowSelectionChange: Row 선택 상태 변경 핸들러
+   *
+   * getCoreRowModel: 기본 row 모델 (data -> row 변환)
+   * getPaginationRowModel: pagination 적용된 row 모델
+   * getSortedRowModel: 정렬된 row 모델
+   * getFilteredRowModel: 필터링된 row 모델
+   *
+   * state: 현재 테이블 상태를 외부에서 직접 관리하기 위해 전달
+   *   - sorting: 정렬 상태
+   *   - columnFilters: 필터 상태
+   *   - columnVisibility: 컬럼 가시성 상태
+   *   - rowSelection: row 선택 상태
+   *
+   * 결과적으로 table 객체를 반환하며,
+   * - table.getHeaderGroups()
+   * - table.getRowModel()
+   * - table.previousPage(), table.nextPage()
+   * 등 다양한 유틸 메서드를 제공함
+   **/
   const table = useReactTable({
     data,
     columns,
@@ -136,6 +120,8 @@ export default function DataTableDemo() {
           }
           className="max-w-sm"
         />
+
+        {/* 컬럼 표시/숨김 Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -163,9 +149,12 @@ export default function DataTableDemo() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      {/* 테이블 영역 */}
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
+            {/* 헤더 그룹 출력 */}
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -184,6 +173,7 @@ export default function DataTableDemo() {
             ))}
           </TableHeader>
           <TableBody>
+            {/* Row 데이터가 있을 경우 */}
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -201,6 +191,7 @@ export default function DataTableDemo() {
                 </TableRow>
               ))
             ) : (
+              /* 데이터가 없을 경우 */
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
@@ -213,11 +204,16 @@ export default function DataTableDemo() {
           </TableBody>
         </Table>
       </div>
+
+      {/* Pagination + 선택 상태 표시 */}
       <div className="flex items-center justify-end space-x-2 py-4">
+        {/* 선택된 row 상태 표시 */}
         <div className="text-muted-foreground flex-1 text-sm">
           {table.getFilteredSelectedRowModel().rows.length} of{' '}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
+
+        {/* 페이지네이션 버튼 */}
         <div className="space-x-2">
           <Button
             variant="outline"
