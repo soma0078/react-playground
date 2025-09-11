@@ -152,6 +152,7 @@ export default function DataTableDemo() {
 
       {/* 테이블 영역 */}
       <div className="overflow-hidden rounded-md border">
+        {/* <DataTable columns={columns} data={data} /> */}
         <Table>
           <TableHeader>
             {/* 헤더 그룹 출력 */}
