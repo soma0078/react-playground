@@ -28,6 +28,7 @@ export const TheHeader = () => {
           <NavLink to="/">Home</NavLink>
           <NavLink to="/carousel">Carousel</NavLink>
           <NavLink to="/chart/area-chart">Chart</NavLink>
+          <NavLink to="/table">Table</NavLink>
         </nav>
       </div>
     </header>

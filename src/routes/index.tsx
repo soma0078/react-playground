@@ -3,6 +3,7 @@ import { Home } from './pages/Home'
 import { DefaultLayout } from './layouts/Default'
 import { Carousel } from './pages/Carousel'
 import { AreaChartGradient } from './pages/AreaChart'
+import DataTableDemo from './pages/Table'
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: '/chart',
         children: [{ path: 'area-chart', element: <AreaChartGradient /> }]
+      },
+      {
+        path: '/table',
+        element: <DataTableDemo />
       }
     ]
   }
