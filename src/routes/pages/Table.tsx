@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/table'
 import { useGetData } from '../../mock'
 import { columns } from '@/components/table'
+import { useGetUsers } from '@/hooks/queries/useGetUser'
 
 /**
  * DataTableDemo 컴포넌트
@@ -41,6 +42,9 @@ import { columns } from '@/components/table'
 export default function DataTableDemo() {
   /* Mock 데이터 가져오기 */
   const data = useGetData()
+
+  const { data: users } = useGetUsers()
+  console.log(users)
 
   /* 정렬 상태 */
   const [sorting, setSorting] = React.useState<SortingState>([])
