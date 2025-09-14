@@ -1,5 +1,6 @@
 import type { ColumnFiltersState } from '@tanstack/react-table'
 import { Input } from '../ui/input'
+import { Button } from '../ui/button'
 import {
   Select,
   SelectContent,
@@ -19,6 +20,7 @@ export default function Filters({
   setColumnFilters
 }: FiltersProps) {
   const [selectedValue, setSelectedValue] = useState('')
+  const [tempInputValue, setTempInputValue] = useState('')
 
   const onFilterChange = (id: string, value: string) =>
     setColumnFilters(
@@ -33,16 +35,21 @@ export default function Filters({
   const handleSelectChange = (value: string) => {
     setColumnFilters([])
     setSelectedValue(value)
+    setTempInputValue('') // Clear temporary input when filter type changes
   }
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTempInputValue(e.target.value)
+  }
+
+  const handleSearchClick = () => {
     if (selectedValue) {
-      onFilterChange(selectedValue, e.target.value)
+      onFilterChange(selectedValue, tempInputValue)
     }
   }
 
-  const inputValue =
-    (columnFilters.find((f) => f.id === selectedValue)?.value as string) || ''
+  // const inputValue =
+  //   (columnFilters.find((f) => f.id === selectedValue)?.value as string) || ''
 
   return (
     <div className="flex gap-2">
@@ -57,11 +64,14 @@ export default function Filters({
       </Select>
       <Input
         placeholder="Search texts...."
-        value={inputValue}
+        value={tempInputValue}
         onChange={handleInputChange}
         disabled={!selectedValue}
         className="max-w-sm"
       />
+      <Button onClick={handleSearchClick} disabled={!selectedValue}>
+        Search
+      </Button>
     </div>
   )
 }

@@ -103,6 +103,7 @@ export default function DataTableDemo() {
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     columnResizeMode: 'onChange',
+
     meta: {
       updateData: (rowIndex: number, columnId: string, value: unknown) =>
         setData((prev) =>
