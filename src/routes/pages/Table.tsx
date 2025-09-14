@@ -18,7 +18,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
+
 import {
   Table,
   TableBody,
@@ -31,6 +31,7 @@ import { useGetData } from '../../mock'
 import { columns } from '@/components/table'
 import { useGetUsers } from '@/hooks/queries/useGetUser'
 import { useState } from 'react'
+import Filters from '@/components/table/Filters'
 
 /**
  * DataTableDemo 컴포넌트
@@ -123,20 +124,11 @@ export default function DataTableDemo() {
     }
   })
 
-  console.log('table data', data)
+  console.log('table filters', columnFilters)
 
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('email')?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-
         {/* 컬럼 표시/숨김 Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -169,6 +161,10 @@ export default function DataTableDemo() {
       {/* 테이블 영역 */}
       <div className="overflow-hidden rounded-md border">
         {/* <DataTable columns={columns} data={data} /> */}
+        <Filters
+          columnFilters={columnFilters}
+          setColumnFilters={setColumnFilters}
+        />
         <Table>
           <TableHeader>
             {/* 헤더 그룹 출력 */}

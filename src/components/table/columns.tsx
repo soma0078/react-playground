@@ -86,6 +86,8 @@ export const columns = [
   // })
   columnHelper.accessor('task', {
     header: 'Task',
-    cell: EditableCell
+    cell: EditableCell,
+    enableColumnFilter: true,
+    filterFn: 'includesString'
   })
 ]
