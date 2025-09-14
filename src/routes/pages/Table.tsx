@@ -105,6 +105,7 @@ export default function DataTableDemo() {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    columnResizeMode: 'onChange',
     state: {
       sorting,
       columnFilters,
@@ -112,6 +113,8 @@ export default function DataTableDemo() {
       rowSelection
     }
   })
+
+  console.log('table size', table.getTotalSize())
 
   return (
     <div className="w-full">
@@ -161,16 +164,26 @@ export default function DataTableDemo() {
           <TableHeader>
             {/* 헤더 그룹 출력 */}
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="relative">
                 {headerGroup.headers.map((header) => {
+                  console.log('table header size', header.getSize())
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      style={{ width: header.getSize() }}
+                      className="relative hover:*:opacity-100"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
+                      <div
+                        onMouseDown={header.getResizeHandler()}
+                        onTouchStart={header.getResizeHandler()}
+                        className={`absolute top-0 right-0 h-full w-1 cursor-col-resize touch-none rounded-lg bg-[#27bbff] opacity-0 select-none ${header.column.getIsResizing() && 'bg-[#2eff31] opacity-100'} `}
+                      />
                     </TableHead>
                   )
                 })}
@@ -185,14 +198,20 @@ export default function DataTableDemo() {
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    console.log('table cell size', cell.column.getSize())
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        // style={{ width: cell.column.getSize() }}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    )
+                  })}
                 </TableRow>
               ))
             ) : (
