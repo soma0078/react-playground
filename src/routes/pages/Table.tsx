@@ -1,6 +1,3 @@
-'use client'
-
-import * as React from 'react'
 import {
   type ColumnFiltersState,
   flexRender,
@@ -33,6 +30,7 @@ import {
 import { useGetData } from '../../mock'
 import { columns } from '@/components/table'
 import { useGetUsers } from '@/hooks/queries/useGetUser'
+import { useState } from 'react'
 
 /**
  * DataTableDemo 컴포넌트
@@ -41,25 +39,23 @@ import { useGetUsers } from '@/hooks/queries/useGetUser'
  **/
 export default function DataTableDemo() {
   /* Mock 데이터 가져오기 */
-  const data = useGetData()
+  const DATA = useGetData()
+  const [data, setData] = useState(DATA)
 
   const { data: users } = useGetUsers()
   console.log(users)
 
   /* 정렬 상태 */
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = useState<SortingState>([])
 
   /* 컬럼 필터 상태 */
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
   /* 컬럼 표시 여부 상태 */
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 
   /* 선택된 row 상태 */
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [rowSelection, setRowSelection] = useState({})
 
   /**
    * useReactTable()
@@ -106,6 +102,19 @@ export default function DataTableDemo() {
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     columnResizeMode: 'onChange',
+    meta: {
+      updateData: (rowIndex: number, columnId: string, value: unknown) =>
+        setData((prev) =>
+          prev.map((row, index) =>
+            index === rowIndex
+              ? {
+                  ...prev[rowIndex],
+                  [columnId]: value
+                }
+              : row
+          )
+        )
+    },
     state: {
       sorting,
       columnFilters,
@@ -114,7 +123,7 @@ export default function DataTableDemo() {
     }
   })
 
-  console.log('table size', table.getTotalSize())
+  console.log('table data', data)
 
   return (
     <div className="w-full">

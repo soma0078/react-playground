@@ -3,6 +3,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { Checkbox } from '../ui/checkbox'
 import { Button } from '../ui/button'
 import { ArrowUpDown } from 'lucide-react'
+import EditableCell from './EditableCell'
 
 const columnHelper = createColumnHelper<Payment>()
 
@@ -70,7 +71,7 @@ export const columns = [
     header: 'First Name',
     // cell: ({ row }) => <div>{row.getValue('firstName')}</div>
     cell: ({ row }) => row.getValue('firstName')
-  })
+  }),
   // columnHelper.group({
   //   header: 'Name',
   //   columns: [
@@ -83,4 +84,8 @@ export const columns = [
   //     })
   //   ]
   // })
+  columnHelper.accessor('task', {
+    header: 'Task',
+    cell: EditableCell
+  })
 ]

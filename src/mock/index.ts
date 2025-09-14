@@ -6,6 +6,7 @@ export type Payment = {
   email: string
   firstName: string
   lastName: string
+  task: string
 }
 
 const data: Payment[] = [
@@ -16,7 +17,8 @@ const data: Payment[] = [
     status: 'success',
     email: 'ken99@example.com',
     firstName: 'Mac',
-    lastName: 'Donald'
+    lastName: 'Donald',
+    task: 'Write Intergration Tests'
   },
   {
     id: '3u1reuv4',
@@ -25,7 +27,8 @@ const data: Payment[] = [
     status: 'success',
     email: 'Abe45@example.com',
     firstName: 'Mec',
-    lastName: 'Donald'
+    lastName: 'Donald',
+    task: 'Cleanup Database'
   },
   {
     id: 'derv1ws0',
@@ -34,7 +37,8 @@ const data: Payment[] = [
     status: 'processing',
     email: 'Monserrat44@example.com',
     firstName: 'Mic',
-    lastName: 'Donald'
+    lastName: 'Donald',
+    task: 'Update NPM Packages'
   },
   {
     id: '5kma53ae',
@@ -43,7 +47,8 @@ const data: Payment[] = [
     status: 'success',
     email: 'Silas22@example.com',
     firstName: 'Moc',
-    lastName: 'Donald'
+    lastName: 'Donald',
+    task: 'Optimize Database Queries'
   },
   {
     id: 'bhqecj4p',
@@ -52,7 +57,8 @@ const data: Payment[] = [
     status: 'failed',
     email: 'carmella@example.com',
     firstName: 'Muc',
-    lastName: 'Donald'
+    lastName: 'Donald',
+    task: 'Design User Interface'
   }
 ]
 
