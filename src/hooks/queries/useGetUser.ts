@@ -1,6 +1,7 @@
-import { getUser } from '@/api'
-import { CACHE_KEYS } from '@/cacheKeys'
 import { useQuery } from '@tanstack/react-query'
+
+import { getUser } from '@/api'
+import { CACHE_KEYS } from '@/constants'
 
 export const useGetUsers = () =>
   useQuery({

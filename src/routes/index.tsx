@@ -1,29 +1,36 @@
 import { createBrowserRouter, RouterProvider } from 'react-router'
-import { Home } from './pages/Home'
+
 import { DefaultLayout } from './layouts/Default'
+import { Home } from './pages/Home'
 import { Carousel } from './pages/Carousel'
 import { AreaChartGradient } from './pages/AreaChart'
 import DataTableDemo from './pages/Table'
+import TextEditor from './pages/TextEditor'
+import { PATHS } from '@/constants'
 
 const router = createBrowserRouter([
   {
     element: <DefaultLayout />,
     children: [
       {
-        path: '/',
+        path: PATHS.HOME,
         element: <Home />
       },
       {
-        path: '/carousel',
+        path: PATHS.CAROUSEL,
         element: <Carousel />
       },
       {
-        path: '/chart',
-        children: [{ path: 'area-chart', element: <AreaChartGradient /> }]
+        path: PATHS.CHART,
+        children: [{ path: PATHS.AREAT_CHART, element: <AreaChartGradient /> }]
       },
       {
-        path: '/table',
+        path: PATHS.TABLE,
         element: <DataTableDemo />
+      },
+      {
+        path: PATHS.TEXT_EDITOR,
+        element: <TextEditor />
       }
     ]
   }
