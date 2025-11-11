@@ -32,7 +32,7 @@ export default function ArticleEditor() {
   }
 
   return (
-    <div className="-order-1 mx-auto w-175">
+    <div className="-order-1 mx-auto">
       <div className="article-editor-container">
         <div id="toolbar-mount-point" />
         <div className="px-4 py-5">
@@ -52,13 +52,21 @@ export default function ArticleEditor() {
         </div>
       </div>
 
-      {titleEditorRef.current && (
-        <div>제목: {titleEditorRef.current.value as string}</div>
-        // <div>제목: {JSON.stringify(titleEditorRef.current.value)}</div>
-      )}
-      {contentEditorRef.current && (
-        <div>내용: {contentEditorRef.current.value as string}</div>
-      )}
+      <div className="mx-auto w-full max-w-170">
+        <div>
+          제목:
+          {titleEditorRef.current && (
+            <>{titleEditorRef.current.value as string}</>
+            // <div>제목: {JSON.stringify(titleEditorRef.current.value)}</div>
+          )}
+        </div>
+        <div>
+          내용:
+          {contentEditorRef.current && (
+            <>{contentEditorRef.current.value as string}</>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

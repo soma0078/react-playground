@@ -10,8 +10,8 @@ const modules = {
       { indent: '+1' }
     ],
     [{ color: [] }, { background: [] }],
-    ['link', 'image'],
-    ['clean']
+    ['link', 'image', 'video', 'formula']
+    // ['clean']
   ]
 }
 
