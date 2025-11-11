@@ -19,7 +19,7 @@ const SPRING_OPTIONS = {
   damping: 50
 } as const
 
-export const Carousel = () => {
+export default function Carousel() {
   const [dragging, setDragging] = useState(false)
   const [imgIndex, setImgIndex] = useState(0)
 

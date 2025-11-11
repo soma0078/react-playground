@@ -6,5 +6,6 @@ export const PATHS = {
   CHART: CHART_BASE_URL,
   AREAT_CHART: `${CHART_BASE_URL}/area-chart`,
   TABLE: '/table',
-  TEXT_EDITOR: '/text-editor'
+  TEXT_EDITOR: '/text-editor',
+  FLOAT_BUTTON: '/float-button'
 }

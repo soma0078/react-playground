@@ -41,7 +41,7 @@ const chartConfig = {
   }
 } satisfies ChartConfig
 
-export function AreaChartGradient() {
+export default function AreaChartGradient() {
   const [activeX, setActiveX] = useState<string | null>(null)
 
   return (

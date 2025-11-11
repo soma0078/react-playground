@@ -1,12 +1,16 @@
 import { createBrowserRouter, RouterProvider } from 'react-router'
 
-import { DefaultLayout } from './layouts/Default'
-import { Home } from './pages/Home'
-import { Carousel } from './pages/Carousel'
-import { AreaChartGradient } from './pages/AreaChart'
-import DataTableDemo from './pages/Table'
-import TextEditor from './pages/TextEditor'
 import { PATHS } from '@/constants'
+
+import {
+  AreaChartGradient,
+  Carousel,
+  FloatButton,
+  Home,
+  DataTableDemo,
+  TextEditor
+} from './pages'
+import { DefaultLayout } from './layouts/Default'
 
 const router = createBrowserRouter([
   {
@@ -31,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: PATHS.TEXT_EDITOR,
         element: <TextEditor />
+      },
+      {
+        path: PATHS.FLOAT_BUTTON,
+        element: <FloatButton />
       }
     ]
   }
