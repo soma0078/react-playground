@@ -1,3 +1,4 @@
+import { PATHS } from '@/constants'
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router'
 
@@ -25,11 +26,12 @@ export const TheHeader = () => {
       <div className="relative w-full">
         <h1>Vite + React + TS Playground</h1>
         <nav className="absolute top-0 right-0 *:not-first:ml-2">
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/carousel">Carousel</NavLink>
-          <NavLink to="/chart/area-chart">Chart</NavLink>
-          <NavLink to="/table">Table</NavLink>
-          <NavLink to="/text-editor">Text Editor</NavLink>
+          <NavLink to={PATHS.HOME}>Home</NavLink>
+          <NavLink to={PATHS.CAROUSEL}>Carousel</NavLink>
+          <NavLink to={PATHS.AREAT_CHART}>Chart</NavLink>
+          <NavLink to={PATHS.TABLE}>Table</NavLink>
+          <NavLink to={PATHS.TEXT_EDITOR}>Text Editor</NavLink>
+          <NavLink to={PATHS.FLOAT_BUTTON}>Float Button</NavLink>
         </nav>
       </div>
     </header>
