@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   type ColumnFiltersState,
   flexRender,
@@ -7,9 +8,16 @@ import {
   getSortedRowModel,
   useReactTable,
   type SortingState,
-  type VisibilityState
+  type VisibilityState,
+  type PaginationState
 } from '@tanstack/react-table'
-import { ChevronDown } from 'lucide-react'
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight
+} from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -18,7 +26,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-
 import {
   Table,
   TableBody,
@@ -27,11 +34,10 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { useGetData } from '../../mock'
-import { columns } from '@/components/table'
-import { useGetUsers } from '@/hooks/queries/useGetUser'
-import { useState } from 'react'
 import Filters from '@/components/table/Filters'
+import { columns } from '@/components/table'
+
+import { useGetData } from '../../mock'
 
 /**
  * DataTableDemo 컴포넌트
@@ -42,9 +48,6 @@ export default function DataTableDemo() {
   /* Mock 데이터 가져오기 */
   const DATA = useGetData()
   const [data, setData] = useState(DATA)
-
-  const { data: users } = useGetUsers()
-  console.log(users)
 
   /* 정렬 상태 */
   const [sorting, setSorting] = useState<SortingState>([])
@@ -57,6 +60,12 @@ export default function DataTableDemo() {
 
   /* 선택된 row 상태 */
   const [rowSelection, setRowSelection] = useState({})
+
+  /* 페이지네이션 초기값 */
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 20
+  })
 
   /**
    * useReactTable()
@@ -97,11 +106,12 @@ export default function DataTableDemo() {
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
     columnResizeMode: 'onChange',
 
     meta: {
@@ -121,11 +131,10 @@ export default function DataTableDemo() {
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection
+      rowSelection,
+      pagination
     }
   })
-
-  console.log('table filters', columnFilters)
 
   return (
     <div className="w-full">
@@ -160,19 +169,22 @@ export default function DataTableDemo() {
       </div>
 
       {/* 테이블 영역 */}
-      <div className="overflow-hidden rounded-md border">
-        {/* <DataTable columns={columns} data={data} /> */}
+      <div className="relative mx-6 rounded-md border py-3">
+        {/* TODO: sticky filter & sticky table header */}
+        {/* <div className="sticky top-16 z-1 mb-2 bg-white px-2"> */}
         <Filters
           columnFilters={columnFilters}
           setColumnFilters={setColumnFilters}
         />
+        {/* </div> */}
         <Table>
+          {/* <TableHeader className="sticky top-25 z-10 bg-white"> */}
           <TableHeader>
             {/* 헤더 그룹 출력 */}
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="relative">
                 {headerGroup.headers.map((header) => {
-                  console.log('table header size', header.getSize())
+                  // console.log('table header size', header.getSize())
                   return (
                     <TableHead
                       key={header.id}
@@ -196,6 +208,7 @@ export default function DataTableDemo() {
               </TableRow>
             ))}
           </TableHeader>
+
           <TableBody>
             {/* Row 데이터가 있을 경우 */}
             {table.getRowModel().rows?.length ? (
@@ -205,7 +218,7 @@ export default function DataTableDemo() {
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => {
-                    console.log('table cell size', cell.column.getSize())
+                    // console.log('table cell size', cell.column.getSize())
                     return (
                       <TableCell
                         key={cell.id}
@@ -243,23 +256,48 @@ export default function DataTableDemo() {
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
 
+        <div className="text-muted-foreground flex-1 text-sm">
+          page {table.getState().pagination.pageIndex + 1} of{' '}
+          {table.getPageCount().toLocaleString()}
+        </div>
+
         {/* 페이지네이션 버튼 */}
         <div className="space-x-2">
           <Button
             variant="outline"
             size="sm"
+            onClick={() => table.firstPage()}
+            disabled={!table.getCanPreviousPage()}
+            aria-label="go to first page"
+          >
+            <ChevronsLeft />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
+            aria-label="go to previous page"
           >
-            Previous
+            <ChevronLeft />
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
+            aria-label="go to next page"
           >
-            Next
+            <ChevronRight />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.lastPage()}
+            disabled={!table.getCanNextPage()}
+            aria-label="go to last page"
+          >
+            <ChevronsRight />
           </Button>
         </div>
       </div>
