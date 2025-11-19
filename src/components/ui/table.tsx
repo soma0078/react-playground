@@ -6,8 +6,8 @@ function Table({ className, ...props }: React.ComponentProps<'table'>) {
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto"
-      // className="relative w-full overflow-x-clip"
+      // TODO: 가로 스크롤 되어야 함(overflow-x-clip는 sticky header 위한 임시 조치)
+      className="relative w-full overflow-x-clip"
     >
       <table
         data-slot="table"

@@ -1,9 +1,11 @@
-import type { Payment } from '@/mock'
 import { createColumnHelper } from '@tanstack/react-table'
-import { Checkbox } from '../ui/checkbox'
-import { Button } from '../ui/button'
 import { ArrowUpDown } from 'lucide-react'
-import EditableCell from './EditableCell'
+
+import { Checkbox } from '@/components/ui/checkbox'
+import { Button } from '@/components/ui/button'
+import EditableCell from '../EditableCell'
+
+import type { Payment } from '@/mock'
 
 const columnHelper = createColumnHelper<Payment>()
 
