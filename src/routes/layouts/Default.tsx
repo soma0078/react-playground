@@ -5,7 +5,7 @@ export const DefaultLayout = () => {
   return (
     <>
       <TheHeader />
-      <main className="min-h-[1000px]">
+      <main>
         <Outlet />
       </main>
       <ScrollRestoration />

@@ -11,6 +11,7 @@ import {
   TextEditor
 } from './pages'
 import { DefaultLayout } from './layouts/Default'
+import TestPage from './pages/Test'
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: PATHS.FLOAT_BUTTON,
         element: <FloatButton />
+      },
+      {
+        path: PATHS.TEST,
+        element: <TestPage />
       }
     ]
   }

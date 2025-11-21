@@ -1,4 +1,4 @@
-import { DataTable, StickyTable } from '@/components/table'
+import { DataTable, FullScreenTable, StickyTable } from '@/components/table'
 import { cn } from '@/lib/utils'
 
 export default function TablePage() {
@@ -14,9 +14,17 @@ export default function TablePage() {
         <DataTable />
       </section>
       <section>
-        <h3 className="bg-purple-200">Sticky table</h3>
-
+        <h3 className="bg-purple-200">
+          Sticky table{' '}
+          <span className="text-sm text-red-500">
+            (*cannot horizontal scroll)
+          </span>
+        </h3>
         <StickyTable />
+      </section>
+      <section>
+        {/* <h3 className="bg-purple-200">FullScreen table</h3> */}
+        <FullScreenTable />
       </section>
     </div>
   )

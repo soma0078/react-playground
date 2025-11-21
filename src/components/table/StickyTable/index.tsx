@@ -61,7 +61,7 @@ export default function StickyTable() {
         <TableRowCountSelect table={table} />
       </div>
       <Table>
-        <TableHeader className="sticky top-16 z-10 bg-purple-100">
+        <TableHeader className="sticky top-16 z-1 bg-purple-100">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="relative">
               {headerGroup.headers.map((header) => {

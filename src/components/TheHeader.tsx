@@ -21,7 +21,7 @@ export const TheHeader = () => {
 
   return (
     <header
-      className={`sticky top-0 z-10 px-4 py-4 transition-all ${isSticky ? 'top-2 mx-4 rounded-full bg-neutral-700/90' : 'w-full bg-transparent'}`}
+      className={`sticky top-0 z-10 px-4 py-4 transition-all ${isSticky ? 'top-2 mx-4 rounded-lg bg-white/50 shadow-[0_-2px_10px_1px_lightgray] backdrop-blur-md' : 'w-full bg-transparent'}`}
     >
       <div className="relative w-full">
         <h1>Vite + React + TS Playground</h1>
@@ -32,6 +32,7 @@ export const TheHeader = () => {
           <NavLink to={PATHS.TABLE}>Table</NavLink>
           <NavLink to={PATHS.TEXT_EDITOR}>Text Editor</NavLink>
           <NavLink to={PATHS.FLOAT_BUTTON}>Float Button</NavLink>
+          <NavLink to={PATHS.TEST}>Test</NavLink>
         </nav>
       </div>
     </header>
