@@ -33,6 +33,7 @@ export const TheHeader = () => {
           <NavLink to={PATHS.TEXT_EDITOR}>Text Editor</NavLink>
           <NavLink to={PATHS.FLOAT_BUTTON}>Float Button</NavLink>
           <NavLink to={PATHS.TEST}>Test</NavLink>
+          <NavLink to={PATHS.GRADIENT}>Gradient</NavLink>
         </nav>
       </div>
     </header>

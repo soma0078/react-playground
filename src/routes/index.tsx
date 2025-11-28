@@ -8,7 +8,8 @@ import {
   FloatButton,
   Home,
   DataTableDemo,
-  TextEditor
+  TextEditor,
+  Gradient
 } from './pages'
 import { DefaultLayout } from './layouts/Default'
 import TestPage from './pages/Test'
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: PATHS.TEST,
         element: <TestPage />
+      },
+      {
+        path: PATHS.GRADIENT,
+        element: <Gradient />
       }
     ]
   }

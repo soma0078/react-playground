@@ -9,5 +9,6 @@ export const PATHS = {
   TEXT_EDITOR: '/text-editor',
   FLOAT_BUTTON: '/float-button',
   TEST: '/test',
-  FULL_SCREEN_TABLE: '/full-screen-table'
+  FULL_SCREEN_TABLE: '/full-screen-table',
+  GRADIENT: '/gradient'
 }
