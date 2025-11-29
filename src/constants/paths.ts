@@ -10,5 +10,6 @@ export const PATHS = {
   FLOAT_BUTTON: '/float-button',
   TEST: '/test',
   FULL_SCREEN_TABLE: '/full-screen-table',
-  GRADIENT: '/gradient'
+  GRADIENT: '/gradient',
+  BLOB: '/blob'
 }

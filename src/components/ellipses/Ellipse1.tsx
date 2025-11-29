@@ -64,6 +64,7 @@ export const Ellipse1 = (props: SVGProps<SVGSVGElement>) => {
     >
       <g filter="url(#filter0_f_471_22725)">
         <motion.path
+          initial={false}
           animate={{ d }}
           transition={{ duration: 4, ease: 'easeInOut' }}
           fill="url(#paint0_linear_471_22725)"

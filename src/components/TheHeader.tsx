@@ -34,6 +34,7 @@ export const TheHeader = () => {
           <NavLink to={PATHS.FLOAT_BUTTON}>Float Button</NavLink>
           <NavLink to={PATHS.TEST}>Test</NavLink>
           <NavLink to={PATHS.GRADIENT}>Gradient</NavLink>
+          <NavLink to={PATHS.BLOB}>Blob</NavLink>
         </nav>
       </div>
     </header>

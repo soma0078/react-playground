@@ -109,6 +109,7 @@ export const Ellipse3 = (props: SVGProps<SVGSVGElement>) => {
         </filter>
         <clipPath id="clip_path_3">
           <motion.path
+            initial={false}
             animate={{ d }}
             transition={{ duration: 3.5, ease: 'easeInOut' }}
           />

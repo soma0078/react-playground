@@ -9,7 +9,8 @@ import {
   Home,
   DataTableDemo,
   TextEditor,
-  Gradient
+  Gradient,
+  Blobs
 } from './pages'
 import { DefaultLayout } from './layouts/Default'
 import TestPage from './pages/Test'
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: PATHS.GRADIENT,
         element: <Gradient />
+      },
+      {
+        path: PATHS.BLOB,
+        element: <Blobs />
       }
     ]
   }

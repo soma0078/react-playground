@@ -5,7 +5,7 @@ export const DefaultLayout = () => {
   return (
     <>
       <TheHeader />
-      <main>
+      <main className="relative z-1">
         <Outlet />
       </main>
       <ScrollRestoration />
