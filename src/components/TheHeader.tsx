@@ -35,6 +35,7 @@ export const TheHeader = () => {
           <NavLink to={PATHS.TEST}>Test</NavLink>
           <NavLink to={PATHS.GRADIENT}>Gradient</NavLink>
           <NavLink to={PATHS.BLOB}>Blob</NavLink>
+          <NavLink to={PATHS.CANVAS}>Canvas</NavLink>
         </nav>
       </div>
     </header>

@@ -11,5 +11,6 @@ export const PATHS = {
   TEST: '/test',
   FULL_SCREEN_TABLE: '/full-screen-table',
   GRADIENT: '/gradient',
-  BLOB: '/blob'
+  BLOB: '/blob',
+  CANVAS: '/canvas'
 }
