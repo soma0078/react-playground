@@ -1,6 +1,29 @@
 import { PATHS } from '@/constants'
 import { useEffect, useState } from 'react'
-import { NavLink } from 'react-router'
+import { NavLink as RouterNavLink } from 'react-router'
+
+const NavLink = ({
+  to,
+  children
+}: {
+  to: string
+  children: React.ReactNode
+}) => {
+  return (
+    <RouterNavLink
+      to={to}
+      className={({ isActive }) =>
+        `rounded p-1 transition-colors ${
+          isActive
+            ? 'bg-gray-400 text-white!'
+            : 'text-gray-600 hover:bg-gray-200'
+        }`
+      }
+    >
+      {children}
+    </RouterNavLink>
+  )
+}
 
 export const TheHeader = () => {
   const [isSticky, setIsSticky] = useState(false)
@@ -26,16 +49,11 @@ export const TheHeader = () => {
       <div className="relative w-full">
         <h1>Vite + React + TS Playground</h1>
         <nav className="absolute top-0 right-0 *:not-first:ml-2">
-          <NavLink to={PATHS.HOME}>Home</NavLink>
-          <NavLink to={PATHS.CAROUSEL}>Carousel</NavLink>
-          <NavLink to={PATHS.AREAT_CHART}>Chart</NavLink>
-          <NavLink to={PATHS.TABLE}>Table</NavLink>
-          <NavLink to={PATHS.TEXT_EDITOR}>Text Editor</NavLink>
-          <NavLink to={PATHS.FLOAT_BUTTON}>Float Button</NavLink>
-          <NavLink to={PATHS.TEST}>Test</NavLink>
-          <NavLink to={PATHS.GRADIENT}>Gradient</NavLink>
-          <NavLink to={PATHS.BLOB}>Blob</NavLink>
-          <NavLink to={PATHS.CANVAS}>Canvas</NavLink>
+          {Object.entries(PATHS).map(([key, value]) => (
+            <NavLink key={key} to={value}>
+              {key}
+            </NavLink>
+          ))}
         </nav>
       </div>
     </header>

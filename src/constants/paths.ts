@@ -12,5 +12,6 @@ export const PATHS = {
   FULL_SCREEN_TABLE: '/full-screen-table',
   GRADIENT: '/gradient',
   BLOB: '/blob',
-  CANVAS: '/canvas'
+  CANVAS: '/canvas',
+  RESPONSIVE: '/responsive'
 }

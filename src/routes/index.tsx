@@ -11,7 +11,8 @@ import {
   TextEditor,
   Gradient,
   Blobs,
-  Canvas
+  Canvas,
+  Responsive
 } from './pages'
 import { DefaultLayout } from './layouts/Default'
 import TestPage from './pages/Test'
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: PATHS.CANVAS,
         element: <Canvas />
+      },
+      {
+        path: PATHS.RESPONSIVE,
+        element: <Responsive />
       }
     ]
   }
