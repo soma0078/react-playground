@@ -12,7 +12,8 @@ import {
   Gradient,
   Blobs,
   Canvas,
-  Responsive
+  Responsive,
+  ScrollStack
 } from './pages'
 import { DefaultLayout } from './layouts/Default'
 import TestPage from './pages/Test'
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
       {
         path: PATHS.RESPONSIVE,
         element: <Responsive />
+      },
+      {
+        path: PATHS.SCROLL_STACK,
+        element: <ScrollStack />
       }
     ]
   }

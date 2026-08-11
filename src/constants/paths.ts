@@ -13,5 +13,6 @@ export const PATHS = {
   GRADIENT: '/gradient',
   BLOB: '/blob',
   CANVAS: '/canvas',
-  RESPONSIVE: '/responsive'
+  RESPONSIVE: '/responsive',
+  SCROLL_STACK: '/scroll-stack'
 }
