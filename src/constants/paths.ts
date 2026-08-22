@@ -10,6 +10,8 @@ export const PATHS = {
   FLOAT_BUTTON: '/float-button',
   TEST: '/test',
   FULL_SCREEN_TABLE: '/full-screen-table',
+  BACKGROUNDS: '/backgrounds',
+  // 아래 셋은 /backgrounds 탭으로 합쳐졌다. 옛 링크를 위해 리다이렉트만 유지한다.
   GRADIENT: '/gradient',
   BLOB: '/blob',
   CANVAS: '/canvas',

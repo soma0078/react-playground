@@ -3,95 +3,103 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Neobrutalism 팔레트.
+ * 규칙은 셋뿐이다 — 배경은 채도 높은 플랫 컬러, 테두리는 검정 2px,
+ * 그림자는 블러 없는 4px 오프셋. 그라디언트와 반투명은 쓰지 않는다.
+ */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  --nb-bg: #fff4e0;
+  --nb-surface: #ffffff;
+  --nb-ink: #000000;
+  --nb-yellow: #ffdc58;
+  --nb-blue: #88aaee;
+  --nb-green: #a3e636;
+  --nb-purple: #a388ee;
+  --nb-orange: #ff7a5c;
+  --nb-muted: #4b4b4b;
+  /* 표·폼처럼 밀도 높은 UI 의 헤어라인 (셸의 검정 2px 과 구분) */
+  --nb-line: #d8d2c6;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: white;
+  --nb-shadow: 4px 4px 0px 0px var(--nb-ink);
+  --nb-shadow-sm: 2px 2px 0px 0px var(--nb-ink);
+  --nb-shadow-lg: 8px 8px 0px 0px var(--nb-ink);
+
+  font-family:
+    'Public Sans',
+    system-ui,
+    -apple-system,
+    'Pretendard',
+    'Apple SD Gothic Neo',
+    sans-serif;
+  line-height: 1.5;
+  font-weight: 500;
+
+  color-scheme: light;
+  color: var(--nb-ink);
+  background-color: var(--nb-bg);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --chart-shady-lane: #3f2b96;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
 
   scrollbar-width: thin;
-}
+  scrollbar-color: var(--nb-ink) var(--nb-bg);
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+  --radius: 5px;
 
-@layer base {
-  body {
-    @apply m-0 p-0;
-  }
-  button {
-    @apply cursor-pointer;
-  }
-}
-
-@layer utilities {
-  .animate-move-background {
-    background-size: 200% 200%;
-    animation: moveBackground 10s linear infinite;
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  /* shadcn 토큰도 같은 규칙 위에 올린다 */
+  --background: var(--nb-bg);
+  --foreground: var(--nb-ink);
+  --card: var(--nb-surface);
+  --card-foreground: var(--nb-ink);
+  --popover: var(--nb-surface);
+  --popover-foreground: var(--nb-ink);
+  --primary: var(--nb-yellow);
+  --primary-foreground: var(--nb-ink);
+  --secondary: var(--nb-surface);
+  --secondary-foreground: var(--nb-ink);
+  --muted: #f2ece0;
+  --muted-foreground: var(--nb-muted);
+  --accent: var(--nb-yellow);
+  --accent-foreground: var(--nb-ink);
+  --destructive: #ff4d4d;
+  --border: var(--nb-line);
+  --input: var(--nb-line);
+  --ring: var(--nb-muted);
+  --chart-1: var(--nb-yellow);
+  --chart-2: var(--nb-blue);
+  --chart-3: var(--nb-green);
+  --chart-4: var(--nb-purple);
+  --chart-5: var(--nb-orange);
+  --chart-shady-lane: #3f2b96;
+  --sidebar: var(--nb-surface);
+  --sidebar-foreground: var(--nb-ink);
+  --sidebar-primary: var(--nb-yellow);
+  --sidebar-primary-foreground: var(--nb-ink);
+  --sidebar-accent: var(--nb-yellow);
+  --sidebar-accent-foreground: var(--nb-ink);
+  --sidebar-border: var(--nb-ink);
+  --sidebar-ring: var(--nb-ink);
 }
 
 @theme inline {
+  --color-nb-bg: var(--nb-bg);
+  --color-nb-surface: var(--nb-surface);
+  --color-nb-ink: var(--nb-ink);
+  --color-nb-yellow: var(--nb-yellow);
+  --color-nb-blue: var(--nb-blue);
+  --color-nb-green: var(--nb-green);
+  --color-nb-purple: var(--nb-purple);
+  --color-nb-orange: var(--nb-orange);
+  --color-nb-muted: var(--nb-muted);
+  --color-nb-line: var(--nb-line);
+
+  --shadow-nb: var(--nb-shadow);
+  --shadow-nb-sm: var(--nb-shadow-sm);
+  --shadow-nb-lg: var(--nb-shadow-lg);
+
   --background-image-pastel-gradient: linear-gradient(
     90deg,
     rgba(207, 245, 255, 1) 0%,
@@ -99,10 +107,10 @@ a:hover {
     rgba(255, 249, 199, 1) 100%
   );
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: 3px;
+  --radius-md: 4px;
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: 8px;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -126,8 +134,8 @@ a:hover {
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --color-chart-shady-lane: var(--chart-shady-lane)
-    --color-sidebar: var(--sidebar);
+  --color-chart-shady-lane: var(--chart-shady-lane);
+  --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
@@ -137,46 +145,78 @@ a:hover {
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground m-0 p-0;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: inherit;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+
+  ::selection {
+    background: var(--nb-yellow);
+    color: var(--nb-ink);
+  }
+
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--nb-bg);
+    border-left: 2px solid var(--nb-ink);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--nb-yellow);
+    border: 2px solid var(--nb-ink);
+  }
+}
+
+@layer utilities {
+  .animate-move-background {
+    background-size: 200% 200%;
+    animation: moveBackground 10s linear infinite;
+  }
+
+  /* 배경에 깔리는 격자 — 종이 위 모눈 느낌 */
+  .nb-grid {
+    background-image:
+      linear-gradient(to right, rgba(0, 0, 0, 0.08) 2px, transparent 2px),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 2px, transparent 2px);
+    background-size: 32px 32px;
+  }
+
+  /* 눌리는 버튼/카드: 그림자를 잃으면서 그만큼 밀려난다 */
+  .nb-press {
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease;
+  }
+  .nb-press:hover {
+    transform: translate(3px, 3px);
+    box-shadow: none !important;
+  }
+  .nb-press:active {
+    transform: translate(4px, 4px);
+    box-shadow: none !important;
   }
 }
 

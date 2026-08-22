@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router'
 
 import { PATHS } from '@/constants'
 
@@ -9,9 +9,7 @@ import {
   Home,
   DataTableDemo,
   TextEditor,
-  Gradient,
-  Blobs,
-  Canvas,
+  Backgrounds,
   Responsive,
   ScrollStack
 } from './pages'
@@ -51,16 +49,21 @@ const router = createBrowserRouter([
         element: <TestPage />
       },
       {
+        path: PATHS.BACKGROUNDS,
+        element: <Backgrounds />
+      },
+      // 예전 개별 경로는 합쳐진 탭으로 보낸다
+      {
         path: PATHS.GRADIENT,
-        element: <Gradient />
+        element: <Navigate to={`${PATHS.BACKGROUNDS}?tab=css-canvas`} replace />
       },
       {
         path: PATHS.BLOB,
-        element: <Blobs />
+        element: <Navigate to={`${PATHS.BACKGROUNDS}?tab=svg-motion`} replace />
       },
       {
         path: PATHS.CANVAS,
-        element: <Canvas />
+        element: <Navigate to={`${PATHS.BACKGROUNDS}?tab=canvas-2d`} replace />
       },
       {
         path: PATHS.RESPONSIVE,

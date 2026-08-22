@@ -39,7 +39,8 @@ interface CustomDialogProps {
   onConfirm?: () => void
 }
 
-const buttonBaseClasses = 'rounded px-4 py-2 transition-colors'
+const buttonBaseClasses =
+  'nb-press rounded-[5px] border-2 border-black px-4 py-2 font-extrabold uppercase shadow-nb-sm'
 
 const FOOTER_LAYOUT_CLASSES: Record<
   NonNullable<CustomDialogProps['footerLayout']>,
@@ -85,18 +86,13 @@ export default function CustomDialog({
 
         <DialogFooter className={footerClasses}>
           <DialogClose asChild>
-            <button
-              className={cn(buttonClasses, 'bg-gray-100 hover:bg-gray-200')}
-            >
+            <button className={cn(buttonClasses, 'bg-white')}>
               {closeText}
             </button>
           </DialogClose>
           {confirmText && (
             <button
-              className={cn(
-                buttonClasses,
-                'bg-blue-500 text-white hover:bg-blue-600'
-              )}
+              className={cn(buttonClasses, 'bg-nb-yellow')}
               onClick={onConfirm}
             >
               {confirmText}

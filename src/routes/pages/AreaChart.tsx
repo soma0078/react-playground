@@ -45,7 +45,7 @@ export default function AreaChartGradient() {
   const [activeX, setActiveX] = useState<string | null>(null)
 
   return (
-    <Card className="bg-pastel-gradient">
+    <Card className="bg-nb-blue">
       <CardHeader>
         <CardTitle>Area Chart - Gradient</CardTitle>
         <CardDescription>

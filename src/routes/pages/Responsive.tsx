@@ -42,7 +42,7 @@ function DemoPanel({
   children: React.ReactNode
 }) {
   return (
-    <section className="mx-auto max-w-2xl scroll-mt-6 space-y-4 rounded-xl border bg-gray-50 p-8">
+    <section className="shadow-nb mx-auto max-w-2xl scroll-mt-6 space-y-4 rounded-[5px] border-2 border-black bg-white p-8">
       <header className="space-y-1">
         <h3 className="text-base font-bold">
           <span className="mr-2 text-indigo-500">{index}</span>

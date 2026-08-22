@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 import Noise from '@/assets/Noise.svg?react'
 
-export default function Canvas() {
+/** 같은 화면을 Canvas 2D API 로만 그린 버전. */
+export const CanvasDemo = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const mouseRef = useRef({ x: -1000, y: -1000 })
   const animationRef = useRef<number>(null)
@@ -13,13 +14,18 @@ export default function Canvas() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // 캔버스 크기를 윈도우에 맞춤
+    // 탭 안에서 쓰이므로 뷰포트가 아니라 부모 박스 크기에 맞춘다
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+      const parent = canvas.parentElement
+      if (!parent) return
+
+      canvas.width = parent.clientWidth
+      canvas.height = parent.clientHeight
     }
     resizeCanvas()
-    window.addEventListener('resize', resizeCanvas)
+
+    const resizeObserver = new ResizeObserver(resizeCanvas)
+    if (canvas.parentElement) resizeObserver.observe(canvas.parentElement)
 
     class Blob {
       x: number
@@ -263,7 +269,7 @@ export default function Canvas() {
 
     // 클린업
     return () => {
-      window.removeEventListener('resize', resizeCanvas)
+      resizeObserver.disconnect()
       canvas.removeEventListener('mousemove', handleMouseMove)
       canvas.removeEventListener('mouseleave', handleMouseLeave)
       if (animationRef.current) {
@@ -273,12 +279,12 @@ export default function Canvas() {
   }, [])
 
   return (
-    <div className="fixed inset-0 h-screen w-screen overflow-hidden bg-gradient-to-b from-[#ADDEFC] to-[#AECDF9]">
+    <div className="relative h-full w-full overflow-hidden bg-gradient-to-b from-[#ADDEFC] to-[#AECDF9]">
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
       <div className="pointer-events-none relative z-10 flex h-full flex-col items-center justify-center px-4">
-        <h1 className="mb-6 text-center text-6xl font-bold text-white drop-shadow-2xl md:text-8xl">
+        <h2 className="mb-6 text-center text-5xl font-bold text-white drop-shadow-2xl md:text-7xl">
           Welcome
-        </h1>
+        </h2>
       </div>{' '}
       <Noise
         preserveAspectRatio="xMidYMid slice"
