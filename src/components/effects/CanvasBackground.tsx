@@ -230,8 +230,11 @@ export const CanvasBackground = () => {
     /* -------- Mouse -------- */
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouse.current.x = e.clientX
-      mouse.current.y = e.clientY
+      // 캔버스가 화면 전체가 아닐 수 있으므로 캔버스 기준 좌표로 환산한다
+      const rect = canvas.getBoundingClientRect()
+
+      mouse.current.x = e.clientX - rect.left
+      mouse.current.y = e.clientY - rect.top
     }
 
     const handleMouseOut = () => {
@@ -245,8 +248,10 @@ export const CanvasBackground = () => {
     /* -------- Resize -------- */
 
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+      const parent = canvas.parentElement
+
+      canvas.width = parent?.clientWidth ?? window.innerWidth
+      canvas.height = parent?.clientHeight ?? window.innerHeight
 
       const positions = [
         { x: canvas.width * 0.2, y: canvas.height * 0.4 },
@@ -267,8 +272,10 @@ export const CanvasBackground = () => {
       )
     }
 
-    window.addEventListener('resize', resizeCanvas)
     resizeCanvas()
+
+    const resizeObserver = new ResizeObserver(resizeCanvas)
+    if (canvas.parentElement) resizeObserver.observe(canvas.parentElement)
 
     /* -------- Animation -------- */
 
@@ -289,7 +296,7 @@ export const CanvasBackground = () => {
     /* -------- Cleanup -------- */
 
     return () => {
-      window.removeEventListener('resize', resizeCanvas)
+      resizeObserver.disconnect()
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mouseout', handleMouseOut)
       cancelAnimationFrame(animationFrameId)
@@ -306,6 +313,7 @@ export const CanvasBackground = () => {
         zIndex: 0,
         opacity: 0.8
       }}
+      className="h-full w-full"
     />
   )
 }
