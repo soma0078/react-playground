@@ -16,5 +16,6 @@ export const PATHS = {
   BLOB: '/blob',
   CANVAS: '/canvas',
   RESPONSIVE: '/responsive',
-  SCROLL_STACK: '/scroll-stack'
+  SCROLL_STACK: '/scroll-stack',
+  MOTIONS: '/motions'
 }

@@ -21,17 +21,17 @@ sequenceDiagram
     participant Repo as 어휘집<br/>vocabulary · taste.md
 
     alt 요청 모드 — 작업하다가 직접 요청
-        Me->>Build: /motion "카드가 쫀득하게 쌓인다"
-        Build->>Repo: 관련 어휘 조회
+        Me->>Build: /motion "버튼이 자석처럼 끌려오게" (일상어 그대로)
+        Build->>Repo: 요청에 쓰인 말과 맞는 어휘 · 수치 조회
         Build->>Build: spec.md 작성 (origin: human)
     else 자율 모드 — 사람 없이 정기 실행
         Sch->>Idea: 정기 실행 (주 2회)
         Idea->>Repo: 어휘집 · taste.md · 기존 모션 읽기
-        Idea->>Idea: 새 조합 선택, 기존 모션과 중복 확인
-        Idea->>Build: spec.md 전달 (origin: ai)
+        Idea->>Idea: 비어 있는 조합 선택, 기존 모션과 중복 확인
+        Idea->>Build: spec.md 전달 (origin: ai, 요청 = 일상어 기획 한 줄)
     end
 
-    Build->>Build: Motion.tsx · demo.tsx 구현
+    Build->>Build: 변형 2~3개 구현 (예: 느긋 · 보통 · 쫀득)
     Build->>GH: feature 브랜치 push, PR 생성
     GH->>CI: 검증 실행
     CI-->>GH: 결과 + 녹화 영상 + 미리보기 링크
@@ -42,24 +42,30 @@ sequenceDiagram
     end
 
     GH->>Critic: 리뷰 요청
-    Critic-->>GH: 스펙과 결과가 일치하는지 코멘트
+    Critic-->>GH: 요청과 결과가 맞는지 코멘트
 
-    Me->>GH: 영상 · 미리보기로 판단
+    loop 마음에 들 때까지
+        Me->>GH: 변형 하나 고르기, 또는 고칠 말 한 줄 ("더 세게 튕기게")
+        GH->>Build: 고친 말을 spec.md 요청에 한 줄 추가
+        Build->>GH: 다시 구현해 push
+    end
+
     alt 채택
         Me->>GH: 머지 + 이유 한 줄
         GH->>Arch: 머지 이벤트
-        Arch->>Repo: 새 어휘 추출, taste.md에 채택 기록
+        Arch->>Repo: status adopted, 요청에 쓴 말 ↔ 고른 수치를 feel.md에 확인됨으로, taste.md에 채택 기록
     else 거절
         Me->>GH: 닫기 + 이유 한 줄
         GH->>Arch: 닫힘 이벤트
-        Arch->>Repo: taste.md에 거절 기록
+        Arch->>Repo: status rejected, taste.md에 거절 기록
     end
 
     Repo-->>Idea: 다음 제안에 취향 반영
 ```
 
-사람이 하는 일은 두 가지뿐이다. **요청하기**(선택)와 **머지 / 닫기 + 이유 한 줄**.
-마지막 이유 한 줄이 `taste.md`에 쌓여야 자율 모드가 점점 취향에 맞아진다.
+사람이 하는 일은 세 가지다. **일상어로 요청하기**(선택), **변형 고르기 또는 고칠 말 한 줄**,
+**머지 / 닫기 + 이유 한 줄**. 수치는 처음부터 끝까지 AI가 다룬다.
+요청에 쓴 말과 고른 수치가 `feel.md`에 짝지어져 쌓일수록 같은 말이 같은 결과를 낸다.
 
 ## 등장 요소
 
@@ -77,17 +83,18 @@ sequenceDiagram
 
 ```
 vocabulary/
-  triggers.md      load, hover, scroll-linked, scroll-triggered, drag, cursor-follow …
-  properties.md    scale, translate, clip-path, blur, path morph, layout …
-  timing.md        duration, easing, spring 파라미터, stagger
-  feel.md          형용사 ↔ 파라미터 ("쫀득한" = spring stiffness 400 / damping 15 …)
+  triggers.md      in-view, cursor-follow, hover, press, drag, scroll-triggered …
+  properties.md    translate, rotate, scale, clip-path, opacity …
+  timing.md        ease-out-quart, spring, stagger, split-timing …
+  feel.md          요청에 쓴 말 ↔ 수치 ("통 튕기는" = spring 220 / 12 …), 확인됨 | 가설
 taste.md           채택 · 거절 사유 로그
 src/motions/<slug>/
-  spec.md          묘사, 사용한 어휘, 프롬프트, origin (human | ai), status
-  Motion.tsx       생성된 컴포넌트
+  spec.md          frontmatter (origin · status · 어휘 태그) + 요청 · 수치 · 메모
+  Motion.tsx       생성된 컴포넌트 (한 파일)
   demo.tsx         갤러리에 띄울 사용 예시
 ```
 
+spec 형식은 [`src/motions/README.md`](../src/motions/README.md)를 따른다.
 갤러리는 `import.meta.glob`으로 `src/motions/*`를 읽는다. 폴더 하나 추가로
 등록이 끝나므로 에이전트가 사이드바 · 라우터 코드를 건드리지 않는다.
 
@@ -101,10 +108,10 @@ src/motions/<slug>/
 
 ## 구현 상태
 
-| 단계 | 내용                                                                             | 상태 |
-| ---- | -------------------------------------------------------------------------------- | ---- |
-| 1    | `src/motions/` 구조, 갤러리 자동 등록, 기존 데모 → `spec.md` 역기술, 어휘집 초안 | ⬜   |
-| 2    | `/motion` 스킬 (요청 모드)                                                       | ⬜   |
-| 3    | CI (build · lint) + Playwright 녹화 + PR 미리보기 배포                           | ⬜   |
-| 4    | 에이전트 4종 (`.claude/agents/`) + `claude-code-action` 연결                     | ⬜   |
-| 5    | `/schedule`로 ideator 정기 실행 (자율 모드)                                      | ⬜   |
+| 단계 | 내용                                                                                                       | 상태 |
+| ---- | ---------------------------------------------------------------------------------------------------------- | ---- |
+| 1    | `src/motions/` 구조, 갤러리 자동 등록, 상세 페이지(요청 → 실행 화면 → 수치), 어휘집 초안, AI 제안 모션 3종 | ✅   |
+| 2    | `/motion` 스킬 (요청 모드) + 변형 2~3개 비교 · 고르기                                                      | ⬜   |
+| 3    | CI (build · lint) + Playwright 녹화 + PR 미리보기 배포                                                     | ⬜   |
+| 4    | 에이전트 4종 (`.claude/agents/`) + `claude-code-action` 연결                                               | ⬜   |
+| 5    | `/schedule`로 ideator 정기 실행 (자율 모드)                                                                | ⬜   |
