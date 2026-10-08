@@ -8,6 +8,7 @@ preview: frame
 triggers: [in-view]
 properties: [translate, clip-path]
 timing: [ease-out-quart, stagger]
+hooks: [useInView]
 feel: [또렷하게 올라오는]
 ---
 

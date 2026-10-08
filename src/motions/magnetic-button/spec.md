@@ -8,6 +8,7 @@ preview: frame
 triggers: [cursor-follow, hover, press]
 properties: [translate, scale]
 timing: [spring]
+hooks: [useMotionValue, useSpring, useTransform]
 feel: [통 튕기는]
 chosen: 통 튕기게
 ---

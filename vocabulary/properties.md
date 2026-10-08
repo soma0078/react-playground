@@ -9,7 +9,7 @@
 | `scale`       | 크기                                                             | 1에서 조금만 벗어나도 크게 보인다. 0.9 · 1.1 정도가 기본 폭                | ScrollStackHero (Lab), magnetic-button, elastic-drag                   |
 | `opacity`     | 투명도                                                           | 이동과 같은 길이로 두면 늦게 나타나 보일 수 있다 → `split-timing`          | ScrollStackHero (Lab)                                                  |
 | `color`       | 글자 · 배경색                                                    | "읽은 것은 흐리게" 같은 상태 표현에 쓴다                                   | ScrollStackHero (Lab)                                                  |
-| `clip-path`   | 보이는 영역을 잘라 드러낸다. `overflow: hidden` 틀로도 같은 효과 | "가려져 있다가 열리듯", "선 밑에서 올라오게"                               | text-mask-reveal                                                       |
+| `clip-path`   | 보이는 영역을 잘라 드러낸다. `overflow: hidden` 틀로도 같은 효과 | "가려져 있다가 열리듯", "선 밑에서 올라오게"                               | text-mask-reveal, scroll-expand-hero                                   |
 | `blur`        | 흐림 (CSS filter · SVG `feGaussianBlur`)                         | 비싸다. 큰 영역에 애니메이션으로 걸지 말고 정적으로 깔아 둔다              | —                                                                      |
 | `path-morph`  | SVG path 모양 자체가 변한다                                      | 점 개수가 같아야 보간된다                                                  | —                                                                      |
 | `layout`      | 요소의 크기 · 위치가 레이아웃 변화로 바뀐다 (FLIP)               | framer-motion `layout`                                                     | —                                                                      |

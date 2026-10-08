@@ -230,6 +230,14 @@ const Numbers = ({ motion }: { motion: MotionEntry }) => {
             {tag}
           </li>
         ))}
+        {motion.hooks.map((hook) => (
+          <li
+            key={hook}
+            className="border-2 border-black bg-zinc-900 px-1.5 font-mono text-xs font-bold text-white"
+          >
+            {hook}
+          </li>
+        ))}
       </ul>
 
       {memo && (
@@ -243,7 +251,10 @@ const Numbers = ({ motion }: { motion: MotionEntry }) => {
 
 const MotionDetail = ({ motion }: { motion: MotionEntry }) => {
   const variants = listOf(motion, '변형')
-  const [variant, setVariant] = useState(motion.chosen ?? variants[0]?.[0])
+  // 고른 변형 없으면 가운데 변형부터 표시 (요청에 가장 가까운 해석)
+  const [variant, setVariant] = useState(
+    motion.chosen ?? variants[Math.floor(variants.length / 2)]?.[0]
+  )
 
   const preview = (
     <>

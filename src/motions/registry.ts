@@ -30,6 +30,8 @@ export interface MotionEntry {
   properties: string[]
   timing: string[]
   feel: string[]
+  /** 구현에 쓴 framer-motion 훅 */
+  hooks: string[]
   /** 구현이 실제로 들어 있는 파일 (저장소 루트 기준) */
   source?: string
   /** `## 변형` 중 사람이 고른 것의 이름 */
@@ -132,6 +134,7 @@ const toEntry = (path: string, raw: string): MotionEntry | null => {
     properties: asList(data.properties),
     timing: asList(data.timing),
     feel: asList(data.feel),
+    hooks: asList(data.hooks),
     source: asString(data.source) || undefined,
     chosen: asString(data.chosen) || undefined,
     sections: parseSections(body),

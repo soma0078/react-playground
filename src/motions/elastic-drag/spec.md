@@ -8,6 +8,7 @@ preview: frame
 triggers: [drag]
 properties: [translate, rotate, scale]
 timing: [spring]
+hooks: [useMotionValue, useTransform]
 feel: [고무줄 같은]
 ---
 
