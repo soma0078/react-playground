@@ -11,7 +11,8 @@ import {
   TextEditor,
   Backgrounds,
   Responsive,
-  ScrollStack
+  ScrollStack,
+  MotionPage
 } from './pages'
 import { DefaultLayout } from './layouts/Default'
 import TestPage from './pages/Test'
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
       {
         path: PATHS.SCROLL_STACK,
         element: <ScrollStack />
+      },
+      {
+        path: `${PATHS.MOTIONS}/:slug`,
+        element: <MotionPage />
       }
     ]
   }

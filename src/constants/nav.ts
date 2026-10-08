@@ -1,3 +1,5 @@
+import { MOTIONS } from '@/motions/registry'
+
 import { BACKGROUND_TABS } from './backgrounds'
 import { PATHS } from './paths'
 
@@ -36,6 +38,20 @@ export const NAV_SECTIONS: NavSection[] = [
         description: '이 플레이그라운드에 무엇이 들어 있는지'
       }
     ]
+  },
+  {
+    // src/motions/* 에서 자동으로 채워진다. AI가 제안한 항목은 new 배지로 구분한다
+    title: 'Motions',
+    accent: 'orange',
+    items: MOTIONS.map((motion) => ({
+      label: motion.title,
+      path: `${PATHS.MOTIONS}/${motion.slug}`,
+      description: motion.summary,
+      badge:
+        motion.origin === 'ai' && motion.status === 'proposed'
+          ? 'new'
+          : undefined
+    }))
   },
   {
     title: 'Animations',

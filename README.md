@@ -1,69 +1,30 @@
-# React + TypeScript + Vite
+# react-playground
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+모션 · 인터랙션을 **말로 표현하는 방법**을 기록하고, 그 기록을 재료로 AI가
+새 모션을 제안 · 구현하는 저장소.
 
-Currently, two official plugins are available:
+- **요청 모드** — 작업하다가 `/motion "카드가 쫀득하게 쌓인다"`처럼 요청하면 스펙 작성부터 PR까지
+- **자율 모드** — AI가 어휘집을 조합해 새 모션을 정기적으로 제안
+- 사람은 PR의 녹화 영상을 보고 **머지 / 닫기 + 이유 한 줄**만 남긴다
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```mermaid
+flowchart LR
+    A[요청 / 정기 실행] --> B[spec.md] --> C[구현] --> D[PR + 녹화]
+    D --> E{나}
+    E -->|머지 · 닫기 + 이유| F[어휘집 · taste.md]
+    F --> A
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+전체 흐름(시퀀스 다이어그램), 역할, 파일 구조, 가드레일은
+**[docs/WORKFLOW.md](docs/WORKFLOW.md)** 에 있다.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Stack
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+React 19 · Vite · TypeScript · Tailwind v4 · framer-motion · TanStack Query / Table · Radix
+
+## 실행
+
+```bash
+pnpm install
+pnpm dev
 ```
