@@ -32,8 +32,15 @@ export interface MotionEntry {
   feel: string[]
   /** 구현이 실제로 들어 있는 파일 (저장소 루트 기준) */
   source?: string
+  /** `## 변형` 중 사람이 고른 것의 이름 */
+  chosen?: string
   sections: MotionSection[]
-  Demo: LazyExoticComponent<ComponentType>
+  /** 변형이 있으면 그 이름을 variant로 받는다 */
+  Demo: LazyExoticComponent<ComponentType<MotionDemoProps>>
+}
+
+export interface MotionDemoProps {
+  variant?: string
 }
 
 const specFiles = import.meta.glob<string>('./*/spec.md', {
@@ -42,7 +49,9 @@ const specFiles = import.meta.glob<string>('./*/spec.md', {
   eager: true
 })
 
-const demoFiles = import.meta.glob<{ default: ComponentType }>('./*/demo.tsx')
+const demoFiles = import.meta.glob<{
+  default: ComponentType<MotionDemoProps>
+}>('./*/demo.tsx')
 
 const slugOf = (path: string) => path.split('/')[1]
 
@@ -124,6 +133,7 @@ const toEntry = (path: string, raw: string): MotionEntry | null => {
     timing: asList(data.timing),
     feel: asList(data.feel),
     source: asString(data.source) || undefined,
+    chosen: asString(data.chosen) || undefined,
     sections: parseSections(body),
     Demo: lazy(loadDemo)
   }

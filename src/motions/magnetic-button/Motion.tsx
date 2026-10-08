@@ -1,5 +1,11 @@
 import { useRef, type ReactNode } from 'react'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  type SpringOptions
+} from 'framer-motion'
 
 import { cn } from '@/lib/utils'
 
@@ -14,27 +20,38 @@ const FIELD = 40
 const PULL = 0.35
 /** 글자가 버튼 이동에 더해 따라가는 비율 */
 const LABEL_PULL = 0.4
-/** damping을 낮춰 돌아올 때 한두 번 출렁이게 한다 */
-const SPRING = { stiffness: 220, damping: 12, mass: 0.6 }
+/**
+ * 복귀 spring. damping만 달리해 출렁임 정도를 비교한다.
+ * 키 이름은 spec.md `## 변형`의 이름과 같아야 한다.
+ */
+export const MAGNETIC_VARIANTS = {
+  차분하게: { stiffness: 220, damping: 18, mass: 0.6 },
+  '통 튕기게': { stiffness: 220, damping: 12, mass: 0.6 },
+  출렁이게: { stiffness: 220, damping: 8, mass: 0.6 }
+} satisfies Record<string, SpringOptions>
+
+export type MagneticVariant = keyof typeof MAGNETIC_VARIANTS
 const PRESS_SCALE = 0.94
 
 export interface MagneticButtonProps {
   children: ReactNode
   className?: string
   onClick?: () => void
+  spring?: SpringOptions
 }
 
 export const MagneticButton = ({
   children,
   className,
-  onClick
+  onClick,
+  spring = MAGNETIC_VARIANTS['통 튕기게']
 }: MagneticButtonProps) => {
   const fieldRef = useRef<HTMLDivElement>(null)
 
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  const springX = useSpring(x, SPRING)
-  const springY = useSpring(y, SPRING)
+  const springX = useSpring(x, spring)
+  const springY = useSpring(y, spring)
   const labelX = useTransform(springX, (value) => value * LABEL_PULL)
   const labelY = useTransform(springY, (value) => value * LABEL_PULL)
 

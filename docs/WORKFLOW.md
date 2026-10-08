@@ -11,11 +11,11 @@
 sequenceDiagram
     autonumber
     actor Me as 나
-    participant Sch as 스케줄러<br/>/schedule
+    participant Sch as 스케줄러<br/>launchd (로컬)
     participant Idea as ideator
     participant Build as builder
     participant GH as GitHub PR
-    participant CI as CI<br/>build · lint · 녹화
+    participant CI as CI<br/>build · lint
     participant Critic as critic
     participant Arch as archivist
     participant Repo as 어휘집<br/>vocabulary · taste.md
@@ -31,10 +31,11 @@ sequenceDiagram
         Idea->>Build: spec.md 전달 (origin: ai, 요청 = 일상어 기획 한 줄)
     end
 
-    Build->>Build: 변형 2~3개 구현 (예: 느긋 · 보통 · 쫀득)
-    Build->>GH: feature 브랜치 push, PR 생성
+    Build->>Build: 변형 2~3개 구현 (예: 차분하게 · 통 튕기게 · 출렁이게)
+    Build->>Build: 로컬에서 실행 화면 녹화
+    Build->>GH: feature 브랜치 push, PR 생성 (녹화 첨부)
     GH->>CI: 검증 실행
-    CI-->>GH: 결과 + 녹화 영상 + 미리보기 링크
+    CI-->>GH: 검증 결과
 
     loop CI 실패 시 (최대 3회)
         GH-->>Build: 실패 로그
@@ -69,15 +70,15 @@ sequenceDiagram
 
 ## 등장 요소
 
-| 이름      | 역할                                  | 읽는 것                                            | 쓰는 것                       |
-| --------- | ------------------------------------- | -------------------------------------------------- | ----------------------------- |
-| 나        | 요청, 최종 판단                       | PR 영상 · 미리보기                                 | 머지 / 닫기 사유              |
-| 스케줄러  | 자율 모드 트리거 (`/schedule` 루틴)   | —                                                  | —                             |
-| ideator   | 어휘 조합으로 새 모션 기획            | `vocabulary/`, `taste.md`, `src/motions/*/spec.md` | 새 `spec.md`                  |
-| builder   | 스펙대로 구현하고 PR 생성             | `spec.md`, `vocabulary/`                           | `Motion.tsx`, `demo.tsx`, PR  |
-| CI        | 기계 검증 + 실행 화면 녹화            | PR 브랜치                                          | 체크 결과, 영상, 미리보기 URL |
-| critic    | 스펙 대비 결과 리뷰 (코드 수정 안 함) | PR diff, 영상                                      | PR 코멘트                     |
-| archivist | 결과를 어휘집에 환류                  | 머지 / 닫힌 PR                                     | `vocabulary/`, `taste.md`     |
+| 이름      | 역할                                  | 읽는 것                                            | 쓰는 것                      |
+| --------- | ------------------------------------- | -------------------------------------------------- | ---------------------------- |
+| 나        | 요청, 최종 판단                       | PR 녹화 · 로컬 `pnpm dev`                          | 머지 / 닫기 사유             |
+| 스케줄러  | 자율 모드 트리거 (로컬 `launchd`)     | —                                                  | —                            |
+| ideator   | 어휘 조합으로 새 모션 기획            | `vocabulary/`, `taste.md`, `src/motions/*/spec.md` | 새 `spec.md`                 |
+| builder   | 스펙대로 구현하고 PR 생성             | `spec.md`, `vocabulary/`                           | `Motion.tsx`, `demo.tsx`, PR |
+| CI        | 기계 검증 (GitHub Actions)            | PR 브랜치                                          | 체크 결과                    |
+| critic    | 스펙 대비 결과 리뷰 (코드 수정 안 함) | PR diff, 영상                                      | PR 코멘트                    |
+| archivist | 결과를 어휘집에 환류                  | 머지 / 닫힌 PR                                     | `vocabulary/`, `taste.md`    |
 
 ## 파일 구조
 
@@ -100,6 +101,7 @@ spec 형식은 [`src/motions/README.md`](../src/motions/README.md)를 따른다.
 
 ## 가드레일
 
+- **Claude는 로컬 PC에서만 실행한다.** 클라우드 세션 · 원격 에이전트 · 외부 배포를 쓰지 않고, 커밋 · PR에 `claude.ai/code/session` 링크를 남기지 않는다
 - main 직접 push 금지. 모든 변경은 feature 브랜치 → PR
 - **머지는 사람만** 한다 (브랜치 보호: PR + CI 통과 + 승인 1)
 - AI 제안 PR은 동시에 최대 2개. 열린 PR이 2개면 ideator는 쉰다
@@ -111,7 +113,7 @@ spec 형식은 [`src/motions/README.md`](../src/motions/README.md)를 따른다.
 | 단계 | 내용                                                                                                       | 상태 |
 | ---- | ---------------------------------------------------------------------------------------------------------- | ---- |
 | 1    | `src/motions/` 구조, 갤러리 자동 등록, 상세 페이지(요청 → 실행 화면 → 수치), 어휘집 초안, AI 제안 모션 3종 | ✅   |
-| 2    | `/motion` 스킬 (요청 모드) + 변형 2~3개 비교 · 고르기                                                      | ⬜   |
-| 3    | CI (build · lint) + Playwright 녹화 + PR 미리보기 배포                                                     | ⬜   |
-| 4    | 에이전트 4종 (`.claude/agents/`) + `claude-code-action` 연결                                               | ⬜   |
-| 5    | `/schedule`로 ideator 정기 실행 (자율 모드)                                                                | ⬜   |
+| 2    | `/motion` 스킬 (`.claude/skills/motion/`) + 변형 2~3개 비교 · 고르기                                       | ✅   |
+| 3    | CI (GitHub Actions: build · lint) + 로컬 녹화 스크립트 (headless 브라우저로 상세 페이지 캡처 · 영상)       | ⬜   |
+| 4    | 에이전트 4종 (`.claude/agents/`), 로컬에서 `claude -p`로 실행                                              | ⬜   |
+| 5    | `launchd`로 ideator 정기 실행 (자율 모드, 예: 화 · 금 09:00, Mac이 켜져 있을 때)                           | ⬜   |
