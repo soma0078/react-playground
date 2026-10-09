@@ -32,6 +32,7 @@ tools: Read, Glob, Grep, Write, Edit, Bash
    npm run motion:check -- <slug>
    ```
    점검이 남긴 `.motion-shots/<slug>/*.png`를 **Read로 직접 열어** 의도한 모습인지 본다.
+   `motion:check`가 종료 코드 75나 "미리보기 서버" · "Chrome" 오류로 실패하면 점검 환경 문제라 모션을 고쳐도 해결되지 않는다. 시도를 반복하지 말고 `FAIL 점검 환경 오류`로 끝낸다.
    스크롤 연출은 `scroll-*` 캡처가 내려갔다 올라오는 동안 맞게 변하는지 확인한다.
 6. 마지막 줄에 `DONE <slug>`만 출력한다. 만들지 못했으면 `FAIL <이유 한 줄>`.
 
