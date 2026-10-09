@@ -1,4 +1,4 @@
-import Noise from '@/assets/Noise.svg?react'
+import Noise from '@/assets/noise.svg?react'
 import { Blob } from '@/components/ui/Blob'
 
 /** SVG path 를 매 프레임 다시 그리는 방식. 마우스에 반응한다. */

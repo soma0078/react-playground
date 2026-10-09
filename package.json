@@ -9,6 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "icons": "npx tsx scripts/generate-icons.ts",
+    "motion:check": "node scripts/check-motion.mjs",
+    "ideator": "bash scripts/ideator.sh",
     "prepare": "husky install"
   },
   "dependencies": {

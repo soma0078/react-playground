@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .env
+
+# 모션 점검 캡처
+.motion-shots

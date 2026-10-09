@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import Noise from '@/assets/Noise.svg?react'
+import Noise from '@/assets/noise.svg?react'
 
 /** 같은 화면을 Canvas 2D API 로만 그린 버전. */
 export const CanvasDemo = () => {
