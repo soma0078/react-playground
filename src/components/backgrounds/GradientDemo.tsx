@@ -1,4 +1,4 @@
-import Noise from '@/assets/Noise.svg?react'
+import Noise from '@/assets/noise.svg?react'
 import { CanvasBackground } from '@/components/effects'
 
 /** CSS 그라디언트 바탕 + 캔버스 블롭 + SVG 노이즈. */
