@@ -20,7 +20,12 @@ tools: Read, Glob, Grep, Write, Edit, Bash
    - 실제 서비스에서 쓸 법한 흔한 UI 연출로 한다 (장식용 기교 금지)
 3. **만든다**: `spec.md` · `Motion.tsx` · `demo.tsx`. 규칙은 SKILL.md A절 5번과 같다.
    - `origin: ai`, `status: proposed`, `created: <프롬프트로 받은 오늘 날짜>`
-   - `## 요청`은 이 한 문단만 보고 같은 결과를 만들 수 있는 프롬프트
+   - `## 요청`은 **일상어에 가까운 2~4문장, 220자 이하**. 무엇이 어떤 느낌으로 움직이는지만 쓴다.
+     수치는 결과를 크게 좌우하는 것 **최대 2개**(예: `85%`)만 넣고, 나머지 값 · 시간 · 상수는 모두 `## 수치`에 쓴다. 요청에 수치를 늘어놓지 않는다
+     - 좋음: `큰 제목이 화면에 들어오면, 흐릿하게 나타나지 말고 줄마다 바닥 선 밑에서 쓱 올라오게 해줘.`
+     - 나쁨: `투명도를 1과 0.45 사이에서 편도 0.9s ease-in-out으로 오가게 하고 블록마다 0.1s씩 어긋나게 …` (수치 나열)
+   - **용어는 개발자가 실제로 쓰는 표준 용어**로 쓴다 (skeleton → 스켈레톤, shimmer → 쉬머, toast → 토스트, tooltip → 툴팁). 영어 용어를 뜻으로 직역하지 않는다 ("뼈대" 금지). 요청 · 수치 · 메모 · 주석 모두 해당
+   - `## 수치`는 결과를 정하는 값 3~5줄, `## 메모`는 다시 만들 때 필요한 주의점 1~2줄
    - 데모는 하나. 변형 탭 금지. 핵심 모션 조절 상수에는 주석
    - 주석은 짧게 `~음` · `~임` · 명사 종결
    - 새 의존성 금지 (`react`, `framer-motion`, `lucide-react`, `@/lib/utils`만)
@@ -28,6 +33,7 @@ tools: Read, Glob, Grep, Write, Edit, Bash
 5. **점검한다** (통과할 때까지):
    ```bash
    npx prettier --write src/motions/<slug> vocabulary
+   npm run spec:check -- <slug>
    npx tsc -b && npm run lint && npm run build
    npm run motion:check -- <slug>
    ```
