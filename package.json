@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "icons": "npx tsx scripts/generate-icons.ts",
     "motion:check": "node scripts/check-motion.mjs",
+    "spec:check": "node scripts/check-spec.mjs",
     "ideator": "bash scripts/ideator.sh",
     "prepare": "husky install"
   },

@@ -222,6 +222,7 @@ $(printf '%s' "$PENDING" | jq -r '.[] | "- #\(.number) \(.slug) → \(if .state 
 VERIFY_LOG="$STATE_DIR/verify.log"
 verify_motion() { # $1 = slug
   (cd "$WT" && npx prettier --write "src/motions/$1" vocabulary >/dev/null \
+    && node scripts/check-spec.mjs "$1" \
     && npx tsc -b && npm run lint && npm run build && node scripts/check-motion.mjs "$1") >"$VERIFY_LOG" 2>&1
 }
 
