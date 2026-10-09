@@ -12,3 +12,4 @@
 - 2026-10-07 · text-mask-reveal · 채택 · 이유 미기재
 - 2026-10-07 · magnetic-button · 채택 · 이유 미기재
 - 2026-10-07 · elastic-drag · 채택 · 이유 미기재
+- 2026-10-09 · scroll-expand-hero · 채택 · 이유 미기재

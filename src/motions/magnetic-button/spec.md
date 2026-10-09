@@ -8,7 +8,9 @@ preview: frame
 triggers: [cursor-follow, hover, press]
 properties: [translate, scale]
 timing: [spring]
+hooks: [useMotionValue, useSpring, useTransform]
 feel: [통 튕기는]
+chosen: 통 튕기게
 ---
 
 ## 요청
@@ -19,10 +21,16 @@ feel: [통 튕기는]
 
 - 자력 범위: 버튼 바깥 40px부터
 - 끌림: 커서와 중심 거리의 35%, 글자는 거기에 40% 더
-- 복귀: spring stiffness 220, damping 12, mass 0.6
+- 복귀: spring stiffness 220, mass 0.6 (damping은 변형별)
 - 누름: 0.94배
+
+## 변형
+
+- 차분하게: damping 18, 거의 넘치지 않고 멈춘다 (2%)
+- 통 튕기게: damping 12, 제자리를 살짝 넘었다 돌아온다 (15%)
+- 출렁이게: damping 8, 제자리를 크게 넘었다 돌아온다 (31%)
 
 ## 메모
 
+- 변형의 % 는 커서를 놓은 뒤 제자리를 넘어가는 거리 / 끌려간 거리 (headless 브라우저 측정)
 - 어휘집에 cursor-follow가 빠르게 반응하는 예시가 없어서 고른 조합. spring을 단단하고 덜 감쇠되게 잡았다
-- damping 12가 "통 튕기는" 정도로 맞는지는 가설. 8 · 18과 비교해 볼 것
