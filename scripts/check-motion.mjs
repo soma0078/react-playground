@@ -2,7 +2,9 @@
 // 모션 스모크 점검: 상세 페이지가 에러 없이 뜨는지 확인하고 단계별 캡처를 남김
 // 사용: npm run motion:check -- <slug>   (사전에 npm run build 필요)
 // 외부 의존성 없이 Chrome DevTools Protocol 직접 사용 (Node 22+)
+// 종료 코드: 0 통과 · 1 모션 문제 · 2 사용법 오류 · 75 점검 환경 문제(Chrome 없음, 서버 기동 실패). 75는 모션을 고쳐도 해결되지 않음
 import { spawn } from 'node:child_process'
+import { createServer } from 'node:net'
 import {
   existsSync,
   mkdirSync,
@@ -19,8 +21,29 @@ if (!slug) {
   process.exit(2)
 }
 
-const PORT = Number(process.env.PORT ?? 4799)
-const BASE = `http://localhost:${PORT}`
+const ENV_ERROR = 75
+
+// 빈 포트를 자동 선택. 남은 서버나 개발 서버와 부딪히지 않고, 엉뚱한 서버에 붙어 통과하는 일도 막음
+const freePort = () =>
+  new Promise((resolve, reject) => {
+    const probe = createServer()
+    probe.once('error', reject)
+    probe.listen(0, '127.0.0.1', () => {
+      const { port } = probe.address()
+      probe.close(() => resolve(port))
+    })
+  })
+
+// 해당 포트가 비어 있는지 확인
+const portFree = (port) =>
+  new Promise((resolve) => {
+    const probe = createServer()
+    probe.once('error', () => resolve(false))
+    probe.listen(port, '127.0.0.1', () => probe.close(() => resolve(true)))
+  })
+
+const PORT = process.env.PORT ? Number(process.env.PORT) : await freePort()
+const BASE = `http://127.0.0.1:${PORT}`
 const SHOT_DIR = join(process.cwd(), '.motion-shots', slug)
 const VIEWPORT = { width: 1440, height: 900 }
 // 스크롤 점검 지점 (문서 높이 대비). 올라가는 구간까지 포함해 되돌아감 버그를 잡음
@@ -37,15 +60,30 @@ const chromePath = [
 
 if (!chromePath) {
   console.error('Chrome을 찾지 못함. CHROME_PATH 지정 필요')
-  process.exit(2)
+  process.exit(ENV_ERROR)
 }
 
 const children = []
 const profile = mkdtempSync(join(tmpdir(), 'motion-check-'))
 
+// 자식은 별도 프로세스 그룹으로 띄워서 손자까지 한꺼번에 종료 (npx 같은 중간 프로세스 아래 서버가 남는 문제 방지)
+const launch = (command, args, options) => {
+  const child = spawn(command, args, { ...options, detached: true })
+  children.push(child)
+  return child
+}
+
+const killGroup = (child) => {
+  try {
+    process.kill(-child.pid, 'SIGKILL')
+  } catch {
+    // 이미 종료됨
+  }
+}
+
 // 자식 프로세스가 끝난 뒤 프로필 삭제. 종료 코드는 정리 실패와 무관하게 유지
 const finish = async (code) => {
-  children.forEach((child) => child.kill('SIGKILL'))
+  children.forEach(killGroup)
   await Promise.all(
     children.map((child) =>
       child.exitCode === null && child.signalCode === null
@@ -66,31 +104,62 @@ const finish = async (code) => {
   process.exit(code)
 }
 
-// 1. 미리보기 서버
-const server = spawn(
-  'npx',
-  ['vite', 'preview', '--port', String(PORT), '--strictPort'],
-  {
-    stdio: 'ignore'
-  }
+// 비정상 종료(Ctrl+C 등)에도 자식이 남지 않게 함
+for (const signal of ['SIGINT', 'SIGTERM']) {
+  process.on(signal, () => finish(130))
+}
+
+// 1. 미리보기 서버 (npx를 거치지 않고 vite를 직접 실행)
+const viteBin = join(process.cwd(), 'node_modules', 'vite', 'bin', 'vite.js')
+if (!existsSync(viteBin)) {
+  console.error('node_modules/vite가 없음 (npm ci 필요)')
+  await finish(ENV_ERROR)
+}
+
+// 포트를 지정했는데 이미 쓰는 중이면 남의 서버에 붙어 통과할 수 있으므로 시작 전에 막음
+if (!(await portFree(PORT))) {
+  console.error(
+    `포트 ${PORT}가 이미 사용 중 (PORT를 비우면 빈 포트를 자동 선택)`
+  )
+  await finish(ENV_ERROR)
+}
+
+const server = launch(
+  process.execPath,
+  [
+    viteBin,
+    'preview',
+    '--host',
+    '127.0.0.1',
+    '--port',
+    String(PORT),
+    '--strictPort'
+  ],
+  { stdio: 'ignore' }
 )
-children.push(server)
 
 for (let i = 0; ; i += 1) {
+  if (server.exitCode !== null) {
+    console.error(
+      `미리보기 서버가 바로 종료됨 (포트 ${PORT} 충돌이거나 dist 없음. npm run build 확인)`
+    )
+    await finish(ENV_ERROR)
+  }
   try {
-    if ((await fetch(BASE)).ok) break
+    // 응답이 와도 내가 띄운 서버가 살아 있을 때만 인정
+    if ((await fetch(BASE)).ok && server.exitCode === null) break
   } catch {
     // 서버 기동 대기
   }
   if (i > 40) {
     console.error('미리보기 서버가 뜨지 않음 (npm run build 했는지 확인)')
-    await finish(2)
+    await finish(ENV_ERROR)
   }
   await sleep(500)
 }
 
 // 2. Chrome 기동 후 DevTools 주소 파싱
-const chrome = spawn(
+const chrome = launch(
   chromePath,
   [
     '--headless=new',
@@ -102,14 +171,10 @@ const chrome = spawn(
   ],
   { stdio: ['ignore', 'ignore', 'pipe'] }
 )
-children.push(chrome)
 
-const wsUrl = await new Promise((resolve, reject) => {
+const wsUrl = await new Promise((resolve) => {
   let buffer = ''
-  const timer = setTimeout(
-    () => reject(new Error('Chrome 기동 시간 초과')),
-    15000
-  )
+  const timer = setTimeout(() => resolve(null), 15000)
   chrome.stderr.on('data', (chunk) => {
     buffer += chunk
     const match = buffer.match(/ws:\/\/\S+/)
@@ -119,6 +184,11 @@ const wsUrl = await new Promise((resolve, reject) => {
     }
   })
 })
+
+if (!wsUrl) {
+  console.error('Chrome 기동 시간 초과')
+  await finish(ENV_ERROR)
+}
 
 // 3. CDP 연결
 const socket = new WebSocket(wsUrl)

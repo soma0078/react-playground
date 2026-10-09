@@ -26,7 +26,7 @@ MAX_OPEN="${MAX_OPEN:-2}"
 MAX_RETRY="${MAX_RETRY:-3}"
 RUN_TIMEOUT="${RUN_TIMEOUT:-1500}"
 BASE_REF="${BASE_REF:-origin/main}"
-export PORT="${PORT:-4810}" # 사용자 개발 서버(4799 등)와 겹치지 않게
+ENV_ERROR=75 # check-motion의 "점검 환경 문제" 종료 코드. 모션을 고쳐도 해결되지 않음
 
 STATE_DIR="${STATE_DIR:-$HOME/.cache/react-playground-ideator}"
 WT="$STATE_DIR/worktree"
@@ -247,8 +247,17 @@ ideator_phase() {
   git ls-remote --exit-code --heads origin "feature/motion-$slug" >/dev/null 2>&1 \
     && { log "원격에 feature/motion-$slug 가 이미 있음 → 폐기"; return 1; }
 
-  local attempt=1
-  until verify_motion "$slug"; do
+  local attempt=1 rc
+  while true; do
+    verify_motion "$slug"
+    rc=$?
+    [ "$rc" -eq 0 ] && break
+    if [ "$rc" -eq "$ENV_ERROR" ]; then
+      # 에이전트가 고칠 수 없는 문제라 수정 요청 없이 바로 중단 (사용량 낭비 방지)
+      log "점검 환경 오류 (모션 문제 아님) → 중단"
+      tail -5 "$VERIFY_LOG" | tee -a "$LOG"
+      return 1
+    fi
     if [ "$attempt" -ge "$MAX_RETRY" ]; then
       log "점검 ${MAX_RETRY}회 실패 → 폐기 (마지막 로그: $VERIFY_LOG)"
       tail -30 "$VERIFY_LOG" | tee -a "$LOG"
