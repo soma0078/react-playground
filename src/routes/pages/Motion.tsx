@@ -87,7 +87,10 @@ const Request = ({
   const [first, ...followUps] = requestsOf(motion)
 
   return (
-    <section className="bg-nb-yellow shadow-nb rounded-[5px] border-2 border-black p-5">
+    <section
+      data-motion="request"
+      className="bg-nb-yellow shadow-nb rounded-[5px] border-2 border-black p-5"
+    >
       <div className="flex items-start justify-between gap-4">
         <p className="text-lg leading-relaxed font-bold break-keep">
           “{first}”
@@ -125,7 +128,7 @@ const Preview = ({
 
   if (motion.preview === 'flow') {
     return (
-      <section className="space-y-3">
+      <section data-motion="preview" className="space-y-3">
         <p className="bg-nb-orange shadow-nb-sm inline-block border-2 border-black px-2 py-0.5 text-[11px] font-extrabold tracking-[0.1em] uppercase">
           아래로 스크롤
         </p>
@@ -139,7 +142,10 @@ const Preview = ({
   }
 
   return (
-    <div className="shadow-nb h-[min(70vh,640px)] min-h-[380px] overflow-hidden rounded-[5px] border-2 border-black">
+    <div
+      data-motion="preview"
+      className="shadow-nb h-[min(70vh,640px)] min-h-[380px] overflow-hidden rounded-[5px] border-2 border-black"
+    >
       <Suspense fallback={fallback}>
         <Demo variant={variant} />
       </Suspense>
