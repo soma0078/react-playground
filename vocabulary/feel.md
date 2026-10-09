@@ -17,6 +17,7 @@
 | 또렷하게 올라오는 | 투명도 없이 `overflow: hidden` 틀 아래 110%에서 0.9s `ease-out-quart`, 줄마다 0.12s | 확인됨 | text-mask-reveal      |
 | 통 튕기는         | spring `stiffness 220, damping 12, mass 0.6`                                        | 확인됨 | magnetic-button       |
 | 고무줄 같은       | 끌 범위 0 + 탄성 0.35, 복귀 bounce `400 / 14`                                       | 확인됨 | elastic-drag          |
+| 숨 쉬듯 깜빡이는  | opacity 1 ↔ 0.45, 편도 0.9s `easeInOut` mirror 무한 반복, 블록마다 0.1s            | 가설   | skeleton-pulse        |
 
 ## 새 말을 추가할 때
 
